@@ -1,0 +1,52 @@
+extends: base.yaml
+run_id: run001_lgbm_tfidf
+description: "Baseline: LightGBM on TF-IDF word+char n-grams plus regex catalog features, log1p target, L1 objective. Text only, no images."
+
+seed: 42
+
+data:
+  clean:
+    drop_null_price: true
+    drop_nonpositive_price: true
+    trim_price_quantiles: [0.0, 1.0]
+    dedup_exact_text: false
+
+features:
+  builder: tfidf_regex_v1
+  word_tfidf:
+    ngram_range: [1, 2]
+    max_features: 200000
+    min_df: 3
+    sublinear_tf: true
+  char_tfidf:
+    analyzer: char_wb
+    ngram_range: [3, 5]
+    max_features: 100000
+    min_df: 3
+    sublinear_tf: true
+  use_regex_features: true
+
+target:
+  transform: log1p
+  min_price: 0.01
+
+model:
+  name: lgbm
+  params:
+    objective: regression_l1
+    n_estimators: 3000
+    learning_rate: 0.05
+    num_leaves: 127
+    min_child_samples: 20
+    feature_fraction: 0.3
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    lambda_l2: 1.0
+    n_jobs: -1
+    verbose: -1
+  early_stopping_rounds: 100
+  log_period: 100
+
+postprocess:
+  calibrate: true
+  calibration_grid: [0.80, 1.06, 0.005]

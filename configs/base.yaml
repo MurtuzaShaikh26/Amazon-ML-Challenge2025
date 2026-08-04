@@ -1,0 +1,26 @@
+seed: 42
+
+paths:
+  data_dir: "data"
+  results_dir: "results"
+
+splits:
+  seed: 42
+  train_size: 50000
+  val_size: 5000
+  test_size: 20000
+  n_bins: 20
+
+data:
+  clean:
+    drop_null_price: true
+    drop_nonpositive_price: true
+    trim_price_quantiles: [0.0, 1.0]
+    dedup_exact_text: false
+
+target:
+  transform: "log1p"
+  min_price: 0.01
+
+logging:
+  level: "INFO"

@@ -1,0 +1,25 @@
+# Data and caches
+data/
+*.parquet
+data/**/*.csv
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+
+# Pickle & Model checkpoints
+*.pkl
+*.joblib
+results/runs/*/*.model
+results/runs/*/*.bin
+results/runs/*/*.pkl
+results/runs/*/*.joblib
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
