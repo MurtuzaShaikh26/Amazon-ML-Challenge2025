@@ -49,7 +49,7 @@ def _deep_merge(base: dict, override: dict) -> dict:
             merged[k] = v
     return merged
 
-def load_config(config_path: Union[str, Path]) -> ConfigDict:
+def load_config(config_path: Union[str, Path], validate: bool = True) -> ConfigDict:
     """
     Load YAML configuration file with inheritance support (`extends: base.yaml`).
     Returns a dot-accessible ConfigDict.
@@ -69,15 +69,16 @@ def load_config(config_path: Union[str, Path]) -> ConfigDict:
             from amlc.paths import REPO_ROOT
             base_path = REPO_ROOT / "configs" / base_filename
         
-        base_cfg = load_config(base_path).to_dict()
+        base_cfg = load_config(base_path, validate=False).to_dict()
         data = _deep_merge(base_cfg, data)
 
     cfg = ConfigDict(data)
     
-    if "run_id" not in cfg:
-        raise ValueError(f"Config at {path} must specify a 'run_id'")
-    if "description" not in cfg:
-        raise ValueError(f"Config at {path} must specify a 'description'")
+    if validate:
+        if "run_id" not in cfg:
+            raise ValueError(f"Config at {path} must specify a 'run_id'")
+        if "description" not in cfg:
+            raise ValueError(f"Config at {path} must specify a 'description'")
         
     return cfg
 
