@@ -1,5 +1,5 @@
 # Data and caches
-data/
+/data/
 *.parquet
 data/**/*.csv
 __pycache__/
